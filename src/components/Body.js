@@ -1,11 +1,18 @@
 import RestaurantCard from "./RestaurantCard";
-
+import Shimmer from "./Shimmer";
 import { useState,useEffect } from "react";
+import { Link  } from "react-router-dom";
 
        
 const Body = () => {
 
-    const [list, setList] = useState([]);
+    const [searchText, setSearchText] = useState("");
+
+    const [originalList, setOriginalList] = useState([]);
+
+    const [filteredRestaurant, setFilteredRestaurant] = useState([]);
+
+    
 
     useEffect(()=> {
         fetchData();
@@ -16,27 +23,54 @@ const Body = () => {
 
         const json = await data.json();
 
-        console.log(json.data.cards[1].card.card.gridElements.infoWithStyle.restaurants);
-
         //optinonal chaining => 
         // Optional chaining (?.) is a feature in JavaScript that allows you to safely access deeply nested properties of an object without having to manually check if each level exists. If any part of the chain is null or undefined, the entire expression will return undefined instead of throwing an error.
-        setList(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+        setOriginalList(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
+
+        setFilteredRestaurant(json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.restaurants);
     };
-    
-    return (
+
+   
+   //Conditional rendering (ternary operator)
+    return originalList.length === 0 ? (
+    <Shimmer/>) :
+     (
         <div className="body">
             <div className="filter">
+                <div className="search">
+                    <input type="text" className="seacrh-box" 
+                    value={searchText}
+                    onChange={(e)=>{
+                        setSearchText(e.target.value);
+                    }}/>
+                   <button
+                      onClick={() => {
+                     // Filter the restaurant cards and update the UI
+                     const filteredRestaurant = originalList.filter((res) =>
+                     res.info.name.toLowerCase().includes(searchText.toLowerCase())
+                    );
+
+                     setFilteredRestaurant(filteredRestaurant);
+                     }}>
+                     Search
+                   </button>
+
+                </div>
                 <button className="filter-btn"
                 onClick={() => {
-                    const filteredList = list.filter(
-                        (res) => res.info.avgRating > 4
+                    const filteredList = originalList.filter(
+                        (res) => res.info.avgRating > 4.5
                     );
-                    setList(filteredList);
-                    console.log(list);
+                    setFilteredRestaurant(filteredList);
+                    console.log(originalList);
                 }}>Top Rated Restaurants</button>
             </div>
             <div className="res-container">
-               {list.map((restaurant) => (<RestaurantCard  key= {restaurant.info.id} resData = {restaurant}/>
+               {filteredRestaurant.map((restaurant) => (
+                <Link key= {restaurant.info.id} to={"/restaurants/" + restaurant.info.id}
+                >
+                <RestaurantCard  resData = {restaurant}/>
+                </Link>
             ))} 
             </div>
         </div>

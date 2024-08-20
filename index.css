@@ -170,3 +170,12 @@ body {
     margin: 10px;
     border : 2px solid black;
 }
+
+.onlineStatus{
+    display: "inline-block";
+    width: "10px";
+    height: "10px";
+    borderRadius: "50%";
+    backgroundColor: onlineStatus ? "green" : "red";
+    marginRight: "10px"
+}

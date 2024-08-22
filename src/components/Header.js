@@ -1,53 +1,77 @@
 import { LOGO_URL } from "../utils/constants";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import useOnlineStatus from "../utils/useOnlineStatus";
 
 const Header = () => {
   const [btnNameReact, setbtnNameReact] = useState("Login");
-  const onlineStatus = useOnlineStatus();
 
   return (
-    <div className="header">
-      <div className="logo-container">
-        <img className="logo" src={LOGO_URL} alt="Logo" />
+    <header className="bg-white shadow-md">
+      <div className="container mx-auto flex justify-between items-center py-4 px-6">
+        {/* Logo Section */}
+        <div className="logo-container">
+          <Link to="/">
+            <img className="w-20 h-20" src={LOGO_URL} alt="Logo" />
+          </Link>
+        </div>
+
+        {/* Navigation Links */}
+        <nav className="nav-items">
+          <ul className="flex space-x-6 text-gray-700 font-semibold">
+            <li>
+              <Link
+                to="/"
+                className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
+              >
+                Home
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/About"
+                className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
+              >
+                About Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/ContactUs"
+                className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
+              >
+                Contact Us
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/Grocery"
+                className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
+              >
+                Grocery
+              </Link>
+            </li>
+            <li>
+              <Link
+                to="/Cart"
+                className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
+              >
+                Cart
+              </Link>
+            </li>
+          </ul>
+        </nav>
+
+        {/* Login/Logout Button */}
+        <button
+          className="bg-blue-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-600 transition duration-300"
+          onClick={() => {
+            setbtnNameReact(btnNameReact === "Login" ? "Logout" : "Login");
+          }}
+        >
+          {btnNameReact}
+        </button>
       </div>
-      <div className="nav-items">
-        <ul>
-          <li className="onlineStatus">
-            <div
-              style={{
-                display: "inline-block",
-                width: "10px",
-                height: "10px",
-                borderRadius: "50%",
-                backgroundColor: onlineStatus ? "green" : "red",
-                marginRight: "10px",
-              }}
-            ></div>
-            {onlineStatus ? "Online" : "Offline"}
-          </li>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/About">About Us</Link>
-          </li>
-          <li>
-            <Link to="/ContactUs">Contact Us</Link>
-          </li>
-          <li>Cart</li>
-          <button
-            className="login"
-            onClick={() => {
-              setbtnNameReact(btnNameReact === "Login" ? "Logout" : "Login");
-            }}
-          >
-            {btnNameReact}
-          </button>
-        </ul>
-      </div>
-    </div>
+    </header>
   );
 };
 

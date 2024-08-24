@@ -1,9 +1,16 @@
 import { LOGO_URL } from "../utils/constants";
-import { useState } from "react";
+import { useState,useContext } from "react";
 import { Link } from "react-router-dom";
+import UserContext from "../utils/UserContext";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const [btnNameReact, setbtnNameReact] = useState("Login");
+
+  const {loggedInUser} = useContext(UserContext);
+
+   //Subscribe to the store using a selector
+   const cartItems = useSelector((store) => store.cart.items );
 
   return (
     <header className="bg-white shadow-md">
@@ -55,7 +62,7 @@ const Header = () => {
                 to="/Cart"
                 className="hover:text-blue-500 hover:scale-110 transition-transform duration-300 transform"
               >
-                Cart
+                Cart - ({cartItems.length} items)
               </Link>
             </li>
           </ul>
@@ -70,6 +77,8 @@ const Header = () => {
         >
           {btnNameReact}
         </button>
+
+        <li className="px-4 font-bold">{loggedInUser}</li>
       </div>
     </header>
   );

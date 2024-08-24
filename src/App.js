@@ -1,4 +1,5 @@
 import React, {lazy,Suspense} from "react";
+import { useState,useEffect } from "react";
 import ReactDOM from "react-dom/client";
 import Header from "./components/Header";
 import Body from "./components/Body";
@@ -8,6 +9,9 @@ import ContactUs from "./components/ContactUs";
 import Error from "./components/Error";
 import RestaurantMenu from "./components/RestaurantMenu";
 import Cart from "./components/Cart";
+import UserContext from "./utils/UserContext";
+import { Provider  } from "react-redux";
+import appStore from "./utils/appStore";
 //Do not import Grocery like this
 //import Grocery from "./components/Grocery";
 
@@ -20,11 +24,28 @@ const Grocery = lazy(() => import("./components/Grocery"));
 
  
 const AppLayout = () => {
+
+  const [userName,setUserName] = useState();
+
+  //authentication
+  useEffect(() => {
+    //Make an API call and send username and password
+    const data = {
+      name:"Shikhar",
+    };
+    setUserName(data.name);
+  }, []);
     return (
+      <Provider store={appStore}>
+      <UserContext.Provider value = {{loggedInUser : userName}}>
         <div className="app">
            <Header/> 
            <Outlet/>
+
         </div>
+        </UserContext.Provider>
+        </Provider>
+       
     )
 };
 

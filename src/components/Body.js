@@ -9,6 +9,8 @@ const Body = () => {
   const [originalList, setOriginalList] = useState([]);
   const [filteredRestaurant, setFilteredRestaurant] = useState([]);
 
+  console.log(originalList);
+
   useEffect(() => {
     fetchData();
   }, []);

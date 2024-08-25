@@ -9,8 +9,9 @@ function RestaurantMenu() {
     const { resId } = useParams();
     const resInfo = useRestaurantMenu(resId);
     const [openSection, setOpenSection] = useState(null); // State for accordion
+    const [addedItems, setAddedItems] = useState([]); // State to track added items
 
-    const dispatch = useDispatch(); // Correct invocation of useDispatch
+    const dispatch = useDispatch();
 
     // If resInfo is still loading, display the Shimmer component
     if (resInfo === null) return <Shimmer />;
@@ -27,9 +28,8 @@ function RestaurantMenu() {
 
     // Function to handle adding items to the cart
     const handleAddItem = (item) => {
-        console.log('Adding item to cart:', item); // Log the item being added
-        // Dispatch an action with the item details
         dispatch(addItem(item));
+        setAddedItems([...addedItems, item.id]); // Track the added item by its ID
     };
 
     return (
@@ -82,10 +82,15 @@ function RestaurantMenu() {
                                     </div>
                                     {/* Add Button */}
                                     <button
-                                        onClick={() => handleAddItem(item.card.info)} // Dispatch action with item details
-                                        className="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-300"
+                                        onClick={() => handleAddItem(item.card.info)}
+                                        className={`mt-4 px-4 py-2 rounded transition duration-300 ${
+                                            addedItems.includes(item.card.info.id)
+                                                ? 'bg-green-500 text-white'
+                                                : 'bg-blue-500 text-white hover:bg-blue-600'
+                                        }`}
+                                        disabled={addedItems.includes(item.card.info.id)}
                                     >
-                                        Add to Cart
+                                        {addedItems.includes(item.card.info.id) ? 'Added to Cart' : 'Add to Cart'}
                                     </button>
                                 </div>
                             </li>
